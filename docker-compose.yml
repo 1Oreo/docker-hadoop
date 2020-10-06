@@ -1,4 +1,4 @@
-version: "2"
+version: "3"
 
 services:
   namenode:
@@ -26,7 +26,7 @@ services:
     env_file:
       - ./hadoop.env
     mem_limit: 8000m
-    memswap_limit:8000m
+    memswap_limit: 8000m
   
   resourcemanager:
     image: bde2020/hadoop-resourcemanager:2.0.0-hadoop3.2.1-java8
