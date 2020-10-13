@@ -1,63 +1,54 @@
-[![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/big-data-europe/Lobby)
+This repository is based on big-data-europe's docker-hadoop repository.
 
-# Changes
+# Purpose
 
-Version 2.0.0 introduces uses wait_for_it script for the cluster startup
+The purpose of this project is to allow HIT students to run a hadoop cluster on their local machines.
 
-# Hadoop Docker
+# Hadoop on Docker
 
-## Supported Hadoop Versions
-See repository branches for supported hadoop versions
+This repository allows users to deploy apache hadoop 3.2.1 on docker using docker-compose.
 
-## Quick Start
+# Perquisites
 
-To deploy an example HDFS cluster, run:
-```
-  docker-compose up
-```
+## Cloning this repository
 
-Run example wordcount job:
-```
-  make wordcount
-```
+The initial thing is to clone this repository. This can be done in several ways:
 
-Or deploy in swarm:
-```
-docker stack deploy -c docker-compose-v3.yml hadoop
-```
+### Download a zip file
 
-`docker-compose` creates a docker network that can be found by running `docker network list`, e.g. `dockerhadoop_default`.
+[zip](images/zip.png)
 
-Run `docker network inspect` on the network (e.g. `dockerhadoop_default`) to find the IP the hadoop interfaces are published on. Access these interfaces with the following URLs:
+### Git clone
 
-* Namenode: http://<dockerhadoop_IP_address>:9870/dfshealth.html#tab-overview
-* History server: http://<dockerhadoop_IP_address>:8188/applicationhistory
-* Datanode: http://<dockerhadoop_IP_address>:9864/
-* Nodemanager: http://<dockerhadoop_IP_address>:8042/node
-* Resource manager: http://<dockerhadoop_IP_address>:8088/
+For more advanced users, using the Git CLI tool, and the Git clone command. Paste this command to your CLI in the desired location:
 
-## Configure Environment Variables
+`git clone https://github.com/1Oreo/docker-hadoop.git`
 
-The configuration parameters can be specified in the hadoop.env file or as environmental variables for specific services (e.g. namenode, datanode etc.):
-```
-  CORE_CONF_fs_defaultFS=hdfs://namenode:8020
-```
+## Installing Docker for Desktop
 
-CORE_CONF corresponds to core-site.xml. fs_defaultFS=hdfs://namenode:8020 will be transformed into:
-```
-  <property><name>fs.defaultFS</name><value>hdfs://namenode:8020</value></property>
-```
-To define dash inside a configuration parameter, use triple underscore, such as YARN_CONF_yarn_log___aggregation___enable=true (yarn-site.xml):
-```
-  <property><name>yarn.log-aggregation-enable</name><value>true</value></property>
-```
+In order to deploy the cluster, Docker is needed, both for running Docker containers, and to deploy docker containers using Docker Compose.  
+Download the installation using the following link:  
+[Docker for Desktop](https://www.docker.com/products/docker-desktop)
 
-The available configurations are:
-* /etc/hadoop/core-site.xml CORE_CONF
-* /etc/hadoop/hdfs-site.xml HDFS_CONF
-* /etc/hadoop/yarn-site.xml YARN_CONF
-* /etc/hadoop/httpfs-site.xml HTTPFS_CONF
-* /etc/hadoop/kms-site.xml KMS_CONF
-* /etc/hadoop/mapred-site.xml  MAPRED_CONF
+# Deploy the cluster
 
-If you need to extend some other configuration file, refer to base/entrypoint.sh bash script.
+Once all the prerequisites are met, we can deploy the cluster on to our Docker. Make sure Docker is up and running (after initializing) before trying to deploy the cluster.
+
+1. Open your CLI (CMD/Powershell on windows, terminal on MacOS/Linux)
+2. Change into cloned repository directory
+3. [cd.png](images/cd.png)  
+4. Run the ofllowing command `docker-compose up`
+5. Open a second terminal windows and verify the containers are running using the following command `docker ps`
+6. You should see 5 containers running as follows:
+7. [dockerps.png](images/dockerps.png)
+
+# Accessing the WEB UIs
+
+Many of the services on Hadoop have a WEB based user interface. When the containers are running appropriately, they can be accessed using a browser pointing to 12.0.0.1 with the appropriate port.
+
+## Accessing History Server
+
+The history server collects the data on Hadoop jobs and shows them in one place. Data such as run time and job name can be viewed using it. Accessing it is being done using port 8088 as follows:  
+[http://127.0.0.1:8088](http://127.0.0.1:8088)  
+The UI looks as follows:  
+[history.png](images/history.png)  
