@@ -52,3 +52,36 @@ The history server collects the data on Hadoop jobs and shows them in one place.
 [http://127.0.0.1:8088](http://127.0.0.1:8088)  
 The UI looks as follows:  
 ![history.png](images/history.png)  
+
+## Accessing HDFS WEB UI
+
+It is possible to manage the HDFS using a web console, using port 9870. Use the following link:  
+[http://127.0.0.1:9870](http://127.0.0.1:9870)  
+This console provides data on the Hadoop cluster, and has a "Utilities" in order to interact with the hdfs file system (deleteing folders, for example).  
+![util1](images/utilities1.png)  
+![util2](images/utilities2.png)  
+![hdfs](images/hdfs.png)  
+
+# Connecting to containers using shell
+
+Many tasks require running CLI commands on the containers (its the equivalent of SSH into a server). It can be done using `docker exec` command to any running container, which appears on `docker ps`:  
+![dockerps.png](images/dockerps.png)  
+For example, connecting to the namenode using docker exec can be done with the following command:  
+`docker exec -it namenode /bin/bash`  
+![exec.png](images/exec.png)  
+With the shell open, you can send any command just like logging in to a server using SSH, and use it in order to run hadoop jobs.  
+
+# Prebuilt apps location on namenode filesystem
+
+Hadoop comes with some default prebuilt applications, within a single JAR file. The path to this file (while connected to the namenode using shell).  
+`cd opt/hadoop-3.2.1/share/hadoop/mapreduce/`  
+This folder contains a file called "hadoop-mapreduce-examples-3.2.1.jar", which contains apps like PI, wordcount and terasort.  
+
+## Running an example PI
+
+While connected using shell and performing cd to the folder, use the following command:  
+`hadoop jar hadoop-mapreduce-examples-3.2.1.jar pi 16 1000`  
+This command will trigger a PI calculation using Monte Carlo and you will be able to see the job on the history server UI:  
+![history.png](images/history.png)  
+Using the UI you can see the status of the the job, details such as compute time etc'.  
+![job.png](images/job.png)  
